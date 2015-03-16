@@ -70,7 +70,7 @@ Eigen::Affine3d ARTDriver::getSegmentTransform( int numBody)
 /**
  * 	Auxiliary function to transform from Rotational ART vector to DFKI's quaternion
  *
- * 	@return No error occured?
+ * 	@return 
  */
  Eigen::Quaterniond ARTDriver::r_to_q( double r[])
  {
