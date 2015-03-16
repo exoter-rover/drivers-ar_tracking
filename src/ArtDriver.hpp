@@ -21,6 +21,10 @@ namespace artracking
 		void disconnect();
 		bool getFrame( const base::Time& timeout = base::Time::fromSeconds(1.0) );
 		base::Time getTimestamp();
+		Eigen::Affine3d getSegmentTransform(int numBody);
+		Eigen::Quaterniond r_to_q( double r[]);
+		bool error_to_console();
+		void output_to_console();
 	};
 
 }
