@@ -55,7 +55,8 @@ Eigen::Affine3d ARTDriver::getSegmentTransform( int numBody)
 {
 	DTrack_Body_Type_d body;
 	Eigen::Affine3d result;
-	if (numBody>dt->getNumBody()){
+
+	if (numBody+1>dt->getNumBody()){
 		cout << "Error: body number too high"<< endl;
 		Eigen::Vector3d trans_m( 0,0,0);
 		result = Eigen::Translation3d(trans_m)*
@@ -65,8 +66,7 @@ Eigen::Affine3d ARTDriver::getSegmentTransform( int numBody)
 		Eigen::Vector3d trans_m( body.loc[0],body.loc[1],body.loc[2]);
 		Eigen::Quaterniond q = this->r_to_q(body.rot);
 		// ART gives data in mm, we want it in metres
-		result = Eigen::Translation3d(trans_m * 1e-3)*q;
-		
+		result = Eigen::Translation3d(trans_m * 1e-3)*q;	
 	}
 
 	return result;
@@ -86,6 +86,7 @@ Eigen::Quaterniond ARTDriver::r_to_q( double r[])
 	 */
  	Eigen::Matrix3d m(r);
  	Eigen::Quaterniond q = Eigen::Quaterniond(m);
+
   	return q;
  }
 
