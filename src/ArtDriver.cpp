@@ -58,7 +58,7 @@ Eigen::Affine3d ARTDriver::getSegmentTransform( int numBody)
 	if (numBody>dt->getNumBody()){
 		cout << "Error: body number too high"<< endl;
 		Eigen::Vector3d trans_m( 0,0,0);
-		 result = Eigen::Translation3d(trans_m)*
+		result = Eigen::Translation3d(trans_m)*
 		Eigen::Quaterniond(1,0,0,0);
 	}else{
 		body = *dt->getBody(numBody);
@@ -71,58 +71,27 @@ Eigen::Affine3d ARTDriver::getSegmentTransform( int numBody)
 
 	return result;
 }
+
 /**
- * 	Auxiliary function to transform from Rotational ART vector to DFKI's quaternion
+ * 	\brief Quaternion from Rotation matrix
  *
- * 	@return 
+ * 	@return Quaternion
  */
- Eigen::Quaterniond ARTDriver::r_to_q( double r[])
+
+Eigen::Quaterniond ARTDriver::r_to_q( double r[])
  {
- 	double trace=r[0]+r[4]+r[8];
- 	double s;
-	double w;
-	double x;
-	double y;
-	double z;
- if( trace > 0 ) {
-  	s= 0.5/sqrt(trace+1);
- 	w=0.25/s;
- 	x=(r[7]-r[5])*s;
- 	y=(r[2]-r[6])*s;
- 	z=(r[3]-r[1])*s;
-
-  } else {
-  	if ( r[0] > r[4] && r[0] > r[8] ) {
-  		s= 2*sqrt(1+r[0]-r[4]-r[8]);
- 		w=(r[7]-r[5])/s;
- 		x=0.25*s;
- 		y=(r[1]-r[3])/s;
- 		z=(r[2]-r[6])/s;
-
-  	} else if (r[4] > r[8]) {
-  		
-  		s= 2*sqrt(1+r[4]-r[0]-r[8]);
- 		w=(r[2]-r[6])/s;
- 		x=(r[1]+r[3])/s;
- 		y=0.25*s;
- 		z=(r[5]+r[7])/s;
-  	} else {
-  		
-  		s= 2*sqrt(1+r[8]-r[0]-r[4]);
- 		w=(r[3]-r[1])/s;
- 		x=(r[2]+r[6])/s;
- 		y=(r[5]+r[7])/s;
- 		z=0.25*s;
-  	}
-  }
-  Eigen::Quaterniond q = Eigen::Quaterniond(w,x,y,z);
-  return q;
-}
+	 /*We assume that the rotation data from ART is 
+	   column-wise as they say, so the second element is
+	   second row - first column
+	 */
+ 	Eigen::Matrix3d m(r);
+ 	Eigen::Quaterniond q = Eigen::Quaterniond(m);
+  	return q;
+ }
 
 /**
  * 	\brief Prints error messages to console
  *
- * 	@return No error occured?
  */
 bool ARTDriver::error_to_console()
 {
