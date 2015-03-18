@@ -20,12 +20,12 @@ bool ARTDriver::connect (const std::string& server_host, unsigned short server_p
 {
 	std::cout << "Connecting to ART..." 
                   << std::endl;
-    dt = new DTrackSDK(server_host,  server_port,data_port, DTrackSDK::SYS_DTRACK_UNKNOWN);
+    // dt = new DTrackSDK(server_host,  server_port,data_port, DTrackSDK::SYS_DTRACK_UNKNOWN);
     
     // This is in case you only need the listening mode: Uncomment line below, comment line above
-    // dt = new DTrackSDK( server_port);
+    dt = new DTrackSDK(data_port);
 
-    std::cout << "Connection stablished" 
+    std::cout << "Connection established" 
                   << std::endl;
 
     //I have no clue of how to check if this shit is connected
