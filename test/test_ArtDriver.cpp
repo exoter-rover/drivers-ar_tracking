@@ -6,8 +6,8 @@ using namespace artracking;
 BOOST_AUTO_TEST_CASE(print_data)
 {
     artracking::ARTDriver artDriver;
-    std::string ip_host="127.0.0.1";
-    unsigned short server_port=50105;
+    std::string ip_host="131.176.25.107";
+    unsigned short server_port=5000;
     unsigned short data_port=0;
     artDriver.connect(ip_host,server_port,data_port);
 
@@ -30,8 +30,8 @@ BOOST_AUTO_TEST_CASE(print_data)
 BOOST_AUTO_TEST_CASE(reconnection)
 {
     artracking::ARTDriver artDriver;
-    std::string ip_host="127.0.0.1";
-    unsigned short server_port=50105;
+    std::string ip_host="131.176.25.107";
+    unsigned short server_port=5000;
     unsigned short data_port=0;
     artDriver.connect(ip_host,server_port,data_port);
 
