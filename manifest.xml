@@ -3,6 +3,7 @@
   This driver provides a wrapper for the functionalities of the Advanced Realtime Tracking driver.
   </description>
   <author>Carlos Crespo/carlos.crespog@gmail.com</author>
+  <maintainer>Javier Hidalgo/javier.hidalgo_carrio@dfki.de</maintainer>
   <license></license>
   <url>http://</url>
   <logo>http://</logo>
