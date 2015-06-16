@@ -20,8 +20,12 @@ bool ARTDriver::connect (const std::string& server_host, unsigned short server_p
 {
 	std::cout << "Connecting to ART..." 
                   << std::endl;
-    dt = new DTrackSDK(server_host,  server_port,data_port, DTrackSDK::SYS_DTRACK_UNKNOWN);
-    std::cout << "Connection stablished" 
+    // dt = new DTrackSDK(server_host,  server_port,data_port, DTrackSDK::SYS_DTRACK_UNKNOWN);
+    
+    // This is in case you only need the listening mode: Uncomment line below, comment line above
+    dt = new DTrackSDK(data_port);
+
+    std::cout << "Connection established" 
                   << std::endl;
 
     //I have no clue of how to check if this shit is connected
@@ -51,74 +55,44 @@ Eigen::Affine3d ARTDriver::getSegmentTransform( int numBody)
 {
 	DTrack_Body_Type_d body;
 	Eigen::Affine3d result;
-	if (numBody>dt->getNumBody()){
+
+	if (numBody+1>dt->getNumBody()){
 		cout << "Error: body number too high"<< endl;
 		Eigen::Vector3d trans_m( 0,0,0);
-		 result = Eigen::Translation3d(trans_m)*
+		result = Eigen::Translation3d(trans_m)*
 		Eigen::Quaterniond(1,0,0,0);
 	}else{
 		body = *dt->getBody(numBody);
 		Eigen::Vector3d trans_m( body.loc[0],body.loc[1],body.loc[2]);
 		Eigen::Quaterniond q = this->r_to_q(body.rot);
 		// ART gives data in mm, we want it in metres
-		result = Eigen::Translation3d(trans_m * 1e-3)*q;
-		
+		result = Eigen::Translation3d(trans_m * 1e-3)*q;	
 	}
 
 	return result;
 }
+
 /**
- * 	Auxiliary function to transform from Rotational ART vector to DFKI's quaternion
+ * 	\brief Quaternion from Rotation matrix
  *
- * 	@return 
+ * 	@return Quaternion
  */
- Eigen::Quaterniond ARTDriver::r_to_q( double r[])
+
+Eigen::Quaterniond ARTDriver::r_to_q( double r[])
  {
- 	double trace=r[0]+r[4]+r[8];
- 	double s;
-	double w;
-	double x;
-	double y;
-	double z;
- if( trace > 0 ) {
-  	s= 0.5/sqrt(trace+1);
- 	w=0.25/s;
- 	x=(r[7]-r[5])*s;
- 	y=(r[2]-r[6])*s;
- 	z=(r[3]-r[1])*s;
+	 /*We assume that the rotation data from ART is 
+	   column-wise as they say, so the second element is
+	   second row - first column
+	 */
+ 	Eigen::Matrix3d m(r);
+ 	Eigen::Quaterniond q = Eigen::Quaterniond(m);
 
-  } else {
-  	if ( r[0] > r[4] && r[0] > r[8] ) {
-  		s= 2*sqrt(1+r[0]-r[4]-r[8]);
- 		w=(r[7]-r[5])/s;
- 		x=0.25*s;
- 		y=(r[1]-r[3])/s;
- 		z=(r[2]-r[6])/s;
-
-  	} else if (r[4] > r[8]) {
-  		
-  		s= 2*sqrt(1+r[4]-r[0]-r[8]);
- 		w=(r[2]-r[6])/s;
- 		x=(r[1]+r[3])/s;
- 		y=0.25*s;
- 		z=(r[5]+r[7])/s;
-  	} else {
-  		
-  		s= 2*sqrt(1+r[8]-r[0]-r[4]);
- 		w=(r[3]-r[1])/s;
- 		x=(r[2]+r[6])/s;
- 		y=(r[5]+r[7])/s;
- 		z=0.25*s;
-  	}
-  }
-  Eigen::Quaterniond q = Eigen::Quaterniond(w,x,y,z);
-  return q;
-}
+  	return q;
+ }
 
 /**
  * 	\brief Prints error messages to console
  *
- * 	@return No error occured?
  */
 bool ARTDriver::error_to_console()
 {
