@@ -1,8 +1,8 @@
 #ifndef __ART_DRIVER_HPP__
 #define __ART_DRIVER_HPP__
 
-#include <base/time.h>
-#include <base/eigen.h>
+#include <base/Time.hpp>
+#include <base/Eigen.hpp>
 #include <boost/shared_ptr.hpp>
 #include <Eigen/Core>
 #include <Eigen/Geometry>

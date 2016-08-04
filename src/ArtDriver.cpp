@@ -2,7 +2,7 @@
 #include <sstream>
 #include <time.h>
 #include <math.h>
-#include <base/logging.h>
+#include <base-logging/Logging.hpp>
 #include "DTrackSDK.hpp"
 #include "ArtDriver.hpp"
 
